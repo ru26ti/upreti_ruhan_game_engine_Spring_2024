@@ -1,6 +1,15 @@
 # This file was created by: Chris Cozort
-
+# per 6 is the best period
 # import libraries and modules
+# my first source control edit
+'''
+Game design truths:
+goals, rules, feedback, freedom, what the verb, and will it form a sentence 
+
+
+
+
+'''
 import pygame as pg
 from settings import *
 from sprites import *
@@ -8,18 +17,31 @@ from random import randint
 import sys
 from os import path
 
+# added this math function to round down the clock
 from math import floor
 
+# this 'cooldown' class is designed to help us control time
 class Cooldown():
-    #set all properties to zero wehn instantiated
-    def _init_(self):
+    # sets all properties to zero when instantiated...
+    def __init__(self):
         self.current_time = 0
         self.event_time = 0
         self.delta = 0
-        #ticking ensure the timer is counting
-    #must use ticking to count up ot donw
+        # ticking ensures the timer is counting...
+    # must use ticking to count up or down
     def ticking(self):
-        self.current_time = floor()
+        self.current_time = floor((pg.time.get_ticks())/1000)
+        self.delta = self.current_time - self.event_time
+    # resets event time to zero - cooldown reset
+    def countdown(self, x):
+        x = x - self.delta
+        if x != None:
+            return x
+    def event_reset(self):
+        self.event_time = floor((pg.time.get_ticks())/1000)
+    # sets current time
+    def timer(self):
+        self.current_time = floor((pg.time.get_ticks())/1000)
 
 
 # Define game class...
@@ -34,10 +56,11 @@ class Game:
         # setting game clock 
         self.clock = pg.time.Clock()
         self.load_data()
+        # added images folder and image in the load_data method for use with the player
     def load_data(self):
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder, 'images')
-        self.player_img = pg.image.load(path.join(img_folder, 'sonic.png')).convert_alpha()
+        self.player_img = pg.image.load(path.join(img_folder, 'Sonic.png')).convert_alpha()
         self.map_data = []
         '''
         The with statement is a context manager in Python. 
@@ -51,6 +74,8 @@ class Game:
 
     # Create run method which runs the whole GAME
     def new(self):
+        # create timer
+        self.test_timer = Cooldown()
         print("create new game...")
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
@@ -89,6 +114,8 @@ class Game:
          sys.exit()
 
     def update(self):
+        # tick the test timer
+        self.test_timer.ticking()
         self.all_sprites.update()
     
     def draw_grid(self):
@@ -109,6 +136,7 @@ class Game:
             self.screen.fill(BGCOLOR)
             self.draw_grid()
             self.all_sprites.draw(self.screen)
+            # draw the timer
             self.draw_text(self.screen, str(self.test_timer.countdown(45)), 24, WHITE, WIDTH/2 - 32, 2)
             pg.display.flip()
 
