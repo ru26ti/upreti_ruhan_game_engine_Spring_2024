@@ -74,6 +74,16 @@ class Player(pg.sprite.Sprite):
     def collide_with_group(self, group, kill):
         hits = pg.sprite.spritecollide(self, group, kill)
         if hits:
+            for hit in hits: 
+                if isinstance(hit, Mob):  
+                    if self.status == "Invincible": 
+                        print ("You can't hurt me")
+                else: 
+                    self.hitpoints -= 10  
+                    print("Player health:", self.hitpoints)
+                    if self.hitpoints <= 0: 
+                        print("Game Over")
+                        self.game.quit()
             if str(hits[0].__class__.__name__) == "Coin":
                 self.moneybag += 1
             if str(hits[0].__class__.__name__) == "PowerUp":
@@ -151,8 +161,7 @@ class Mob(pg.sprite.Sprite):
         self.groups = game.all_sprites, game.mobs
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(RED)
+        self.image = game.mob_img
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y

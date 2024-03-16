@@ -62,6 +62,7 @@ class Game:
         img_folder = path.join(game_folder, 'images')
         self.player_img = pg.image.load(path.join(img_folder, 'Sonic.png')).convert_alpha()
         self.map_data = []
+        self.mob_img = pg.image.load(path.join(img_folder, 'eggman.png')).convert_alpha()
         '''
         The with statement is a context manager in Python. 
         It is used to ensure that a resource is properly closed or released 
