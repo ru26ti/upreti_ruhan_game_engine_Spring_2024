@@ -1,4 +1,4 @@
-# This file was created by: Ruhan Upreti
+# This file was created by: Chris Cozort
 # This code was inspired by Zelda and informed by Chris Bradfield
 import pygame as pg
 from settings import *
