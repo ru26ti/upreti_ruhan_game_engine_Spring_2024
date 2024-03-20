@@ -1,8 +1,9 @@
-# This file was created by: Chris Cozort
+# This file was created by: Ruhan Upreti
 # This code was inspired by Zelda and informed by Chris Bradfield
 import pygame as pg
 from settings import *
 from random import choice
+import sys
 
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -113,14 +114,12 @@ class Player(pg.sprite.Sprite):
         # add collision later
         self.collide_with_walls('x')
         self.rect.y = self.y
-        if self.hitpoints <= 0:             
-            print("Game Over")             
-        self.game.quit()
         # add collision later
         self.collide_with_walls('y')
         self.collide_with_group(self.game.coins, True)
         self.collide_with_group(self.game.power_ups, True)
         self.collide_with_group(self.game.mobs, False)
+        
           
         # coin_hits = pg.sprite.spritecollide(self.game.coins, True)
         # if coin_hits:
