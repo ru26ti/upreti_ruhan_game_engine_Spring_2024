@@ -23,3 +23,4 @@ POWER_UP_EFFECTS = ["I can fly", "I'm invincible", "I'm bulletproof"]
 # Player settings
 PLAYER_SPEED = 300
 PLAYER_IMG = 'Sonic.png'
+MOB_IMG = 'Eggman.png'

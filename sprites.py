@@ -22,6 +22,8 @@ class Player(pg.sprite.Sprite):
         self.speed = 300
         self.status = ""
         self.hitpoints = 100
+        self.material = True
+
     
     def get_keys(self):
         self.vx, self.vy = 0, 0 
@@ -51,22 +53,23 @@ class Player(pg.sprite.Sprite):
     #     return False
             
     def collide_with_walls(self, dir):
-        if dir == 'x':
-            hits = pg.sprite.spritecollide(self, self.game.walls, False)
-            if hits:
-                if self.vx > 0:
-                    self.x = hits[0].rect.left - self.rect.width
-                if self.vx < 0:
-                    self.x = hits[0].rect.right
+        if self.material == True:
+            if dir == 'x':
+                hits = pg.sprite.spritecollide(self, self.game.walls, False)
+                if hits:
+                    if self.vx > 0:
+                        self.x = hits[0].rect.left - self.rect.width
+                    if self.vx < 0:
+                        self.x = hits[0].rect.right
                 self.vx = 0
                 self.rect.x = self.x
-        if dir == 'y':
-            hits = pg.sprite.spritecollide(self, self.game.walls, False)
-            if hits:
-                if self.vy > 0:
-                    self.y = hits[0].rect.top - self.rect.height
-                if self.vy < 0:
-                    self.y = hits[0].rect.bottom
+            if dir == 'y':
+                hits = pg.sprite.spritecollide(self, self.game.walls, False)
+                if hits:
+                    if self.vy > 0:
+                        self.y = hits[0].rect.top - self.rect.height
+                    if self.vy < 0:
+                        self.y = hits[0].rect.bottom
                 self.vy = 0
                 self.rect.y = self.y
     
@@ -85,7 +88,7 @@ class Player(pg.sprite.Sprite):
                         print("Game Over")
                         self.game.quit()
             if str(hits[0].__class__.__name__) == "Coin":
-                self.moneybag += 1
+                self.hitpoints += 100
             if str(hits[0].__class__.__name__) == "PowerUp":
                 print(hits[0].__class__.__name__)
                 effect = choice(POWER_UP_EFFECTS)
@@ -95,9 +98,12 @@ class Player(pg.sprite.Sprite):
             if str(hits[0].__class__.__name__) == "Mob":
                 # print(hits[0].__class__.__name__)
                 # print("Collided with mob")
-                # self.hitpoints -= 1
+                self.hitpoints -= 1
                 if self.status == "Invincible":
                     print("you can't hurt me")
+            if str(hits[0].__class__.__name__) == "PowerUp":
+                self.material = False
+          
 
     def update(self):
         self.get_keys()

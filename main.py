@@ -139,8 +139,18 @@ class Game:
             self.all_sprites.draw(self.screen)
             # draw the timer
             self.draw_text(self.screen, str(self.test_timer.countdown(45)), 24, WHITE, WIDTH/2 - 32, 2)
+            self.draw_text(self.screen, str(self.player.hitpoints), 100, WHITE, WIDTH/2 - 400,0)
+            if self.player.hitpoints >= 51:
+                self.draw_text(self.screen, str(self.player.hitpoints), 100, GREEN, WIDTH/2 - 400,0)
+            if self.player.hitpoints <= 50:
+                self.draw_text(self.screen, str(self.player.hitpoints), 100, YELLOW, WIDTH/2 - 400,0)
+            if self.player.hitpoints <= 30:
+                self.draw_text(self.screen, str(self.player.hitpoints), 100, RED, WIDTH/2 - 400,0)
+
             pg.display.flip()
 
+#Power Up
+            
     def events(self):
          for event in pg.event.get():
             if event.type == pg.QUIT:
