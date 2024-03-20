@@ -113,6 +113,9 @@ class Player(pg.sprite.Sprite):
         # add collision later
         self.collide_with_walls('x')
         self.rect.y = self.y
+        if self.hitpoints <= 0:             
+            print("Game Over")             
+        self.game.quit()
         # add collision later
         self.collide_with_walls('y')
         self.collide_with_group(self.game.coins, True)
@@ -122,6 +125,9 @@ class Player(pg.sprite.Sprite):
         # coin_hits = pg.sprite.spritecollide(self.game.coins, True)
         # if coin_hits:
         #     print("I got a coin")
+
+        
+     
         
 class Wall(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -205,3 +211,4 @@ class Mob(pg.sprite.Sprite):
         self.collide_with_walls('x')
         self.rect.y = self.y
         self.collide_with_walls('y')
+
