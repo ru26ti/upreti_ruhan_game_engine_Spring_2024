@@ -98,7 +98,7 @@ class Game:
                 if tile == 'C':
                     Coin(self, col, row)
                 if tile == 'M':
-                    Mob(self, col, row)
+                    Mob(self, col, row, self.player)
                 if tile == 'U':
                     PowerUp(self, col, row)
 
@@ -173,3 +173,4 @@ while True:
     g.new()
     g.run()
     # g.show_go_screen()
+

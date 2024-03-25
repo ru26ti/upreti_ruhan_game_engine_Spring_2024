@@ -4,6 +4,7 @@ import pygame as pg
 from settings import *
 from random import choice
 import sys
+from pygame import Vector2
 
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -124,6 +125,9 @@ class Player(pg.sprite.Sprite):
         # coin_hits = pg.sprite.spritecollide(self.game.coins, True)
         # if coin_hits:
         #     print("I got a coin")
+        if self.hitpoints <= 0:             
+            print("Game Over")             
+            self.game.quit()
 
         
      
@@ -168,44 +172,55 @@ class PowerUp(pg.sprite.Sprite):
         self.rect.y = y * TILESIZE
         
 class Mob(pg.sprite.Sprite):
-    def __init__(self, game, x, y):
+    def __init__(self, game, x, y, target):
         self.groups = game.all_sprites, game.mobs
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = game.mob_img
+        self.image = pg.transform.scale(game.mob_img, (TILESIZE*2, TILESIZE*2))
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
         self.vx, self.vy = 100, 100
         self.x = x * TILESIZE
         self.y = y * TILESIZE
-        self.speed = 1
+        self.speed = 75
+        self.target = target
     def collide_with_walls(self, dir):
         if dir == 'x':
-            # print('colliding on the x')
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
             if hits:
-                self.vx *= -1
-                self.rect.x = self.x
+                if self.vx > 0:
+                    self.x = hits[0].rect.left - self.rect.width
+                if self.vx < 0:
+                    self.x = hits[0].rect.right
+            self.vx = 0
+            self.rect.x = self.x
         if dir == 'y':
-            # print('colliding on the y')
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
             if hits:
-                self.vy *= -1
-                self.rect.y = self.y
+                if self.vy > 0:
+                    self.y = hits[0].rect.top - self.rect.height
+                if self.vy < 0:
+                    self.y = hits[0].rect.bottom
+            self.vy = 0
+            self.rect.y = self.y
     def update(self):
         # self.rect.x += 1
+        # self.x += self.vx * self.game.dt
+        # self.y += self.vy * self.game.dt
+        
+        # if self.rect.x < self.game.player.rect.x:
+        #     self.vx = 100
+        # if self.rect.x > self.game.player.rect.x:
+        #     self.vx = -100    
+        # if self.rect.y < self.game.player.rect.y:
+        #     self.vy = 100
+        # if self.rect.y > self.game.player.rect.y:
+        #     self.vy = -100
+        self.vx, self.vy = (Vector2(self.target.rect.center) - Vector2(self.x, self.y)) / TILESIZE * self.speed
         self.x += self.vx * self.game.dt
         self.y += self.vy * self.game.dt
-        
-        if self.rect.x < self.game.player.rect.x:
-            self.vx = 100
-        if self.rect.x > self.game.player.rect.x:
-            self.vx = -100    
-        if self.rect.y < self.game.player.rect.y:
-            self.vy = 100
-        if self.rect.y > self.game.player.rect.y:
-            self.vy = -100
+
         self.rect.x = self.x
         self.collide_with_walls('x')
         self.rect.y = self.y
