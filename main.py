@@ -6,8 +6,9 @@
 Game design truths:
 goals, rules, feedback, freedom, what the verb, and will it form a sentence 
 
-
-
+Sources: 
+Mr. Cozort's course code files and GitHub
+Kids can code: https://github.com/kidscancode/pygame_tutorials/tree/master/tilemap/part%2001 
 
 '''
 import pygame as pg
@@ -20,7 +21,7 @@ from os import path
 # added this math function to round down the clock
 from math import floor
 
-# this 'cooldown' class is designed to help us control time
+# this 'cooldown' class is designed to help  control time
 class Cooldown():
     # sets all properties to zero when instantiated...
     def __init__(self):
@@ -56,7 +57,7 @@ class Game:
         # setting game clock 
         self.clock = pg.time.Clock()
         self.load_data()
-        # added images folder and image in the load_data method for use with the player
+        # added images folder and image in the load_data method for use with the player and enemy
     def load_data(self):
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder, 'images')
@@ -86,6 +87,7 @@ class Game:
         # self.player1 = Player(self, 1, 1)
         # for x in range(10, 20):
         #     Wall(self, x, 5)
+        # Gave denomination for tile, coin, mob, player, and powerup to put on map
         for row, tiles in enumerate(self.map_data):
             print(row)
             for col, tile in enumerate(tiles):
@@ -103,13 +105,14 @@ class Game:
                     PowerUp(self, col, row)
 
     def run(self):
-        # 
+        # code to run clock and game once game has started
         self.playing = True
         while self.playing:
             self.dt = self.clock.tick(FPS) / 1000
             self.events()
             self.update()
             self.draw()
+            # quit once quit button is pressed
     def quit(self):
          pg.quit()
          sys.exit()
@@ -118,13 +121,13 @@ class Game:
         # tick the test timer
         self.test_timer.ticking()
         self.all_sprites.update()
-    
+    # dimensions of map with sizes imported from settings
     def draw_grid(self):
          for x in range(0, WIDTH, TILESIZE):
               pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
          for y in range(0, HEIGHT, TILESIZE):
               pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
-    
+    # font for healthnumber ticker
     def draw_text(self, surface, text, size, color, x, y):
         font_name = pg.font.match_font('arial')
         font = pg.font.Font(font_name, size)
@@ -132,7 +135,7 @@ class Game:
         text_rect = text_surface.get_rect()
         text_rect.topleft = (x,y)
         surface.blit(text_surface, text_rect)
-    
+    # countdown and color variation for health number and how much health coins add once collected
     def draw(self):
             self.screen.fill(BGCOLOR)
             self.draw_grid()

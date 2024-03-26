@@ -5,7 +5,7 @@ from settings import *
 from random import choice
 import sys
 from pygame import Vector2
-
+# Player class
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites
@@ -26,7 +26,7 @@ class Player(pg.sprite.Sprite):
         self.hitpoints = 100
         self.material = True
 
-    
+    # What keys to press to make player move in the respected directions
     def get_keys(self):
         self.vx, self.vy = 0, 0 
         keys = pg.key.get_pressed()
@@ -53,7 +53,7 @@ class Player(pg.sprite.Sprite):
     #         if wall.x == self.x + dx and wall.y == self.y + dy:
     #             return True
     #     return False
-            
+      # collisions of walls for player      
     def collide_with_walls(self, dir):
         if self.material == True:
             if dir == 'x':
@@ -76,6 +76,7 @@ class Player(pg.sprite.Sprite):
                 self.rect.y = self.y
     
     # made possible by Aayush's question!
+    # collisons with mob and the effects it does; -5 hitpoints
     def collide_with_group(self, group, kill):
         hits = pg.sprite.spritecollide(self, group, kill)
         if hits:
@@ -93,6 +94,7 @@ class Player(pg.sprite.Sprite):
                 self.hitpoints += 100
             if str(hits[0].__class__.__name__) == "PowerUp":
                 print(hits[0].__class__.__name__)
+                # powerup voids collisions and lets player goes through walls
                 effect = choice(POWER_UP_EFFECTS)
                 print(effect)
                 if effect == "Invincible":
@@ -100,22 +102,23 @@ class Player(pg.sprite.Sprite):
             if str(hits[0].__class__.__name__) == "Mob":
                 # print(hits[0].__class__.__name__)
                 # print("Collided with mob")
-                self.hitpoints -= 1
+                # collisions with mob -5, damage with enemy interaction
+                self.hitpoints -= 3
                 if self.status == "Invincible":
                     print("you can't hurt me")
             if str(hits[0].__class__.__name__) == "PowerUp":
                 self.material = False
           
-
+# collisions with coins, mobs, and powerups
     def update(self):
         self.get_keys()
         self.x += self.vx * self.game.dt
         self.y += self.vy * self.game.dt
         self.rect.x = self.x
-        # add collision later
+        # added collisions
         self.collide_with_walls('x')
         self.rect.y = self.y
-        # add collision later
+        # added collisions
         self.collide_with_walls('y')
         self.collide_with_group(self.game.coins, True)
         self.collide_with_group(self.game.power_ups, True)
@@ -125,13 +128,15 @@ class Player(pg.sprite.Sprite):
         # coin_hits = pg.sprite.spritecollide(self.game.coins, True)
         # if coin_hits:
         #     print("I got a coin")
+
+        # makes game over once health reaches 0
         if self.hitpoints <= 0:             
             print("Game Over")             
             self.game.quit()
 
         
      
-        
+# wall class with collisions to restrict the player    
 class Wall(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.walls
@@ -144,7 +149,7 @@ class Wall(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-
+# coin class heals player
 class Coin(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.coins
@@ -157,7 +162,7 @@ class Coin(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-
+# powerup class lets player go through walls
 class PowerUp(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.power_ups
@@ -170,7 +175,7 @@ class PowerUp(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-        
+# mob class with damage from interactions with players     
 class Mob(pg.sprite.Sprite):
     def __init__(self, game, x, y, target):
         self.groups = game.all_sprites, game.mobs
@@ -185,6 +190,7 @@ class Mob(pg.sprite.Sprite):
         self.y = y * TILESIZE
         self.speed = 75
         self.target = target
+# collides enemy with walls, so it doesn't go off the map x axis 
     def collide_with_walls(self, dir):
         if dir == 'x':
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
@@ -195,6 +201,7 @@ class Mob(pg.sprite.Sprite):
                     self.x = hits[0].rect.right
             self.vx = 0
             self.rect.x = self.x
+            # collides enemy with walls, so it doesn't go off the map y axis 
         if dir == 'y':
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
             if hits:
@@ -217,6 +224,8 @@ class Mob(pg.sprite.Sprite):
         #     self.vy = 100
         # if self.rect.y > self.game.player.rect.y:
         #     self.vy = -100
+
+        # make enemy follow player around as a part of the game
         self.vx, self.vy = (Vector2(self.target.rect.center) - Vector2(self.x, self.y)) / TILESIZE * self.speed
         self.x += self.vx * self.game.dt
         self.y += self.vy * self.game.dt
