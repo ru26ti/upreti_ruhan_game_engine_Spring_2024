@@ -21,7 +21,7 @@ class Player(pg.sprite.Sprite):
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.moneybag = 0
-        self.speed = 300
+        self.speed = 250
         self.status = ""
         self.hitpoints = 100
         self.material = True
@@ -103,7 +103,7 @@ class Player(pg.sprite.Sprite):
                 # print(hits[0].__class__.__name__)
                 # print("Collided with mob")
                 # collisions with mob -5, damage with enemy interaction
-                self.hitpoints -= 3
+                self.hitpoints -= 5
                 if self.status == "Invincible":
                     print("you can't hurt me")
             if str(hits[0].__class__.__name__) == "PowerUp":
