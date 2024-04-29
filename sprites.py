@@ -145,6 +145,7 @@ class Player(pg.sprite.Sprite):
         if self.hitpoints <= 0:             
             print("Game Over")             
             self.game.quit()
+        
 
         
      
@@ -261,6 +262,7 @@ class Mob(pg.sprite.Sprite):
 
             Bullet(self.game, self.rect.centerx, self.rect.centery, angle, self, YELLOW, 10, 20)
             self.shoot_timer = self.shoot_cooldown
+            
 
 # Bullet Sprites
 class Bullet(pg.sprite.Sprite):
