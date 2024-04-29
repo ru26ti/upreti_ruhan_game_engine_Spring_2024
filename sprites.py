@@ -27,10 +27,21 @@ class Player(pg.sprite.Sprite):
         self.hitpoints = 100
         self.material = True
 
+        self.shoot_cooldown = 1
+        self.shoot_timer = self.shoot_cooldown
+
     # What keys to press to make player move in the respected directions
     def get_keys(self):
         self.vx, self.vy = 0, 0 
         keys = pg.key.get_pressed()
+        clicks = pg.mouse.get_pressed()
+        if clicks[0]:
+            if self.shoot_timer <= 0:
+                offset = Vector2(pg.mouse.get_pos()) - Vector2(self.rect.center)
+                # Calculate angle between holder and target
+                angle = -math.degrees(math.atan2(offset.y, offset.x))
+                Bullet(self.game, self.rect.centerx, self.rect.centery, angle, self, YELLOW, 10, 20)
+                self.shoot_timer = self.shoot_cooldown
         if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.vx = -self.speed
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
@@ -125,7 +136,7 @@ class Player(pg.sprite.Sprite):
         self.collide_with_group(self.game.power_ups, True)
         self.collide_with_group(self.game.mobs, False)
         
-                                                                        
+        self.shoot_timer -= self.game.dt                                       
         # coin_hits = pg.sprite.spritecollide(self.game.coins, True)
         # if coin_hits:
         #     print("I got a coin")
@@ -178,7 +189,7 @@ class PowerUp(pg.sprite.Sprite):
         self.rect.y = y * TILESIZE
 # mob class with damage from interactions with players     
 class Mob(pg.sprite.Sprite):
-    def __init__(self, game, x, y, target):
+    def __init__(self, game, x, y, target, hitpoints):
         self.groups = game.all_sprites, game.mobs
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
@@ -191,6 +202,7 @@ class Mob(pg.sprite.Sprite):
         self.y = y * TILESIZE
         self.speed = 75
         self.target = target
+        self.hitpoints = hitpoints
 
         self.shoot_cooldown = 2
         self.shoot_timer = self.shoot_cooldown
@@ -216,6 +228,7 @@ class Mob(pg.sprite.Sprite):
             self.vy = 0
             self.rect.y = self.y
     def update(self):
+        if self.hitpoints <= 0: self.kill()
         # self.rect.x += 1
         # self.x += self.vx * self.game.dt
         # self.y += self.vy * self.game.dt
@@ -293,7 +306,11 @@ class Bullet(pg.sprite.Sprite):
         hits = pg.sprite.spritecollide(self, self.game.all_sprites, False)
         if hits:
             # If bullet hits mob, kill mob
-            if hits[0].__class__.__name__ == 'Player':
+            if hits[0].__class__.__name__ == 'Player' and self.shooter.__class__.__name__ != 'Player':
+                hits[0].hitpoints -= self.damage
+                print(hits[0].hitpoints)
+                self.kill()
+            if hits[0].__class__.__name__ == 'Mob' and self.shooter.__class__.__name__ != 'Mob':
                 hits[0].hitpoints -= self.damage
                 print(hits[0].hitpoints)
                 self.kill()
