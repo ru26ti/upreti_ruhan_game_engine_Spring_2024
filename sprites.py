@@ -5,6 +5,7 @@ from settings import *
 from random import choice
 import sys
 from pygame import Vector2
+import math
 # Player class
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -190,6 +191,9 @@ class Mob(pg.sprite.Sprite):
         self.y = y * TILESIZE
         self.speed = 75
         self.target = target
+
+        self.shoot_cooldown = 2
+        self.shoot_timer = self.shoot_cooldown
 # collides enemy with walls, so it doesn't go off the map x axis 
     def collide_with_walls(self, dir):
         if dir == 'x':
@@ -235,3 +239,64 @@ class Mob(pg.sprite.Sprite):
         self.rect.y = self.y
         self.collide_with_walls('y')
 
+        self.shoot_timer -= self.game.dt
+        if self.shoot_timer <= 0:
+           
+            offset = Vector2(self.target.rect.center) - Vector2(self.rect.center)
+            # Calculate angle between holder and target
+            angle = -math.degrees(math.atan2(offset.y, offset.x))
+
+            Bullet(self.game, self.rect.centerx, self.rect.centery, angle, self, YELLOW, 10, 20)
+            self.shoot_timer = self.shoot_cooldown
+
+# Bullet Sprites
+class Bullet(pg.sprite.Sprite):
+    def __init__(self, game, x, y, angle, shooter, color, damage, speed):
+        self.groups = game.all_sprites
+        # init superclass
+        pg.sprite.Sprite.__init__(self, self.groups)
+        # set game class
+        self.game = game
+        # Set dimensions
+        # self.image = pg.transform.rotozoom(pg.image.load('./assets/bullet1.png'), angle+45, 2)
+        
+        self.image = pg.Surface((10, 10))
+        self.image.fill(color)
+ 
+        self.rect = self.image.get_rect(center=(x, y))
+        self.x = x
+        self.y = y
+ 
+        self.shooter = shooter
+        self.color = color
+ 
+        self.angle = angle
+        self.speed = speed
+        self.damage = damage
+ 
+        # Calculating velocity based on angle
+        self.vx = math.cos(self.angle * math.pi/180) * self.speed
+        self.vy = math.sin(self.angle * math.pi/180) * self.speed
+   
+    def update(self):
+        # Move in direction specified in init, constant speed
+        self.x += self.vx
+        self.y -= self.vy
+ 
+        self.rect.x = int(self.x)
+        self.rect.y = int(self.y)
+ 
+        self.collide()
+ 
+    # Handle bullet collisions
+    def collide(self):
+        hits = pg.sprite.spritecollide(self, self.game.all_sprites, False)
+        if hits:
+            # If bullet hits mob, kill mob
+            if hits[0].__class__.__name__ == 'Player':
+                hits[0].hitpoints -= self.damage
+                print(hits[0].hitpoints)
+                self.kill()
+            # Destroy bullet if hits wall
+            elif hits[0].__class__.__name__ == 'Wall':
+                self.kill()
