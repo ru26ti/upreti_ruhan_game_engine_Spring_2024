@@ -289,7 +289,7 @@ class Bullet(pg.sprite.Sprite):
         self.speed = speed
         self.damage = damage
  
-        # Calculating velocity based on angle
+        # Calculating velocity based on angle-help from gpt
         self.vx = math.cos(self.angle * math.pi/180) * self.speed
         self.vy = math.sin(self.angle * math.pi/180) * self.speed
    
