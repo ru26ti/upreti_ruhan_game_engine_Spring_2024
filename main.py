@@ -2,6 +2,8 @@
 # per 6 is the best period
 # import libraries and modules
 # my first source control edit
+# Create a fun, challenging, and engaging game for all!
+# Goal is for sonic to defeat egmgman, hop into a portal and escape!
 '''
 Game design truths:
 goals, rules, feedback, freedom, what the verb, and will it form a sentence 

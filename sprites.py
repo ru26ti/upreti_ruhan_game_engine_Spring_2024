@@ -273,7 +273,7 @@ class Bullet(pg.sprite.Sprite):
         # set game class
         self.game = game
         # Set dimensions
-        # self.image = pg.transform.rotozoom(pg.image.load('./assets/bullet1.png'), angle+45, 2)
+    
         
         self.image = pg.Surface((10, 10))
         self.image.fill(color)
@@ -289,7 +289,7 @@ class Bullet(pg.sprite.Sprite):
         self.speed = speed
         self.damage = damage
  
-        # Calculating velocity based on angle-help from gpt
+        # Calculating angle between shooter and target
         self.vx = math.cos(self.angle * math.pi/180) * self.speed
         self.vy = math.sin(self.angle * math.pi/180) * self.speed
    
