@@ -259,7 +259,7 @@ class Mob(pg.sprite.Sprite):
             offset = Vector2(self.target.rect.center) - Vector2(self.rect.center)
             # Calculate angle between holder and target
             angle = -math.degrees(math.atan2(offset.y, offset.x))
-
+            # Cooldown for gun as it was shooting too many bullets at once
             Bullet(self.game, self.rect.centerx, self.rect.centery, angle, self, YELLOW, 10, 20)
             self.shoot_timer = self.shoot_cooldown
             
