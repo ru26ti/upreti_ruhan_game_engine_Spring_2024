@@ -104,6 +104,8 @@ class Player(pg.sprite.Sprite):
                         self.game.quit()
             if str(hits[0].__class__.__name__) == "Coin":
                 self.hitpoints += 100
+            if str(hits[0].__class__.__name__) == "Portal":
+                self.game.show_end_screen()
             if str(hits[0].__class__.__name__) == "PowerUp":
                 print(hits[0].__class__.__name__)
                 # powerup voids collisions and lets player goes through walls
@@ -231,8 +233,8 @@ class Mob(pg.sprite.Sprite):
             self.rect.y = self.y
     def update(self):
         if self.hitpoints <= 0:
+            Portal(self.game, 3, 3)
             self.kill()
-            self.game.show_end_screen()
         # self.rect.x += 1
         # self.x += self.vx * self.game.dt
         # self.y += self.vy * self.game.dt
@@ -323,18 +325,13 @@ class Bullet(pg.sprite.Sprite):
             elif hits[0].__class__.__name__ == 'Wall':
                 self.kill()
 
-class PowerUp(pg.sprite.Sprite):
+class Portal(pg.sprite.Sprite):
     def __init__(self, game, x, y):
-        self.groups = game.all_sprites
+        self.groups = game.all_sprites, game.portal
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
         self.image.fill(BLUE)
-        self.rect = self.image.get_rect()
-        self.x = x
-        self.y = y
-        self.rect.x = x * TILESIZE
-        self.rect.y = y * TILESIZE
-
-    def update():
-        hits = pg.sprite.spritecollide(self, self.game.all_sprites, False)
+        self.x = x * TILESIZE
+        self.y = y * TILESIZE
+        self.rect = self.image.get_rect(center=(self.x, self.y))
