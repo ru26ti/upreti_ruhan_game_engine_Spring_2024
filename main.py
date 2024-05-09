@@ -19,6 +19,7 @@ from sprites import *
 from random import randint
 import sys
 from os import path
+import time
 
 # added this math function to round down the clock
 from math import floor
@@ -102,7 +103,7 @@ class Game:
                 if tile == 'C':
                     Coin(self, col, row)
                 if tile == 'M':
-                    Mob(self, col, row, self.player, 100)
+                    Mob(self, col, row, self.player, 10)
                 if tile == 'U':
                     PowerUp(self, col, row)
 
@@ -152,6 +153,10 @@ class Game:
             if self.player.hitpoints <= 30:
                 self.draw_text(self.screen, str(self.player.hitpoints), 100, RED, WIDTH/2 - 400,0)
 
+            for mob in self.mobs.sprites():
+                pg.draw.rect(self.screen, LIGHTGREY, pg.Rect(*Vector2(mob.rect.left, mob.rect.bottom+8), TILESIZE, 5))
+                pg.draw.rect(self.screen, RED, pg.Rect(*Vector2(mob.rect.left, mob.rect.bottom+8), mob.hitpoints/mob.max_hitpoints*TILESIZE*2, 5))
+
             pg.display.flip()
 
 #Power Up
@@ -169,6 +174,24 @@ class Game:
             #         self.player.move(dy=-1)
             #     if event.key == pg.K_DOWN:
             #         self.player.move(dy=1)
+    
+    def show_end_screen(self):
+        print('Victory')
+        self.screen.fill(BGCOLOR)
+        self.draw_text(self.screen, 'Victory!', 60, WHITE, WIDTH/2 - 32, HEIGHT/2)
+        pg.display.flip()
+        self.playing = False
+
+        time.sleep(2)
+
+        while True:
+            # Check if player presses key
+            for event in pg.event.get():
+                if event.type == pg.KEYUP:
+                    self.new()
+                    return
+                if event.type == pg.QUIT:
+                    self.quit()
 
 # Instantiate the game... 
 g = Game()
@@ -177,5 +200,4 @@ g = Game()
 while True:
     g.new()
     g.run()
-    # g.show_go_screen()
 

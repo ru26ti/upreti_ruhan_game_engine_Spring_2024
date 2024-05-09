@@ -203,6 +203,7 @@ class Mob(pg.sprite.Sprite):
         self.y = y * TILESIZE
         self.speed = 75
         self.target = target
+        self.max_hitpoints = hitpoints
         self.hitpoints = hitpoints
 
         self.shoot_cooldown = 2
@@ -229,7 +230,9 @@ class Mob(pg.sprite.Sprite):
             self.vy = 0
             self.rect.y = self.y
     def update(self):
-        if self.hitpoints <= 0: self.kill()
+        if self.hitpoints <= 0:
+            self.kill()
+            self.game.show_end_screen()
         # self.rect.x += 1
         # self.x += self.vx * self.game.dt
         # self.y += self.vy * self.game.dt
@@ -264,7 +267,7 @@ class Mob(pg.sprite.Sprite):
             self.shoot_timer = self.shoot_cooldown
             
 
-# Bullet Sprites
+# Bullet Sprites; modified from ChatGPT
 class Bullet(pg.sprite.Sprite):
     def __init__(self, game, x, y, angle, shooter, color, damage, speed):
         self.groups = game.all_sprites
@@ -319,3 +322,19 @@ class Bullet(pg.sprite.Sprite):
             # Destroy bullet if hits wall
             elif hits[0].__class__.__name__ == 'Wall':
                 self.kill()
+
+class PowerUp(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image.fill(BLUE)
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+
+    def update():
+        hits = pg.sprite.spritecollide(self, self.game.all_sprites, False)
