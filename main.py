@@ -59,6 +59,7 @@ class Game:
         # setting game clock 
         self.clock = pg.time.Clock()
         self.load_data()
+        self.victory = False
         # added images folder and image in the load_data method for use with the player and enemy
     def load_data(self):
         game_folder = path.dirname(__file__)
@@ -111,10 +112,12 @@ class Game:
         # code to run clock and game once game has started
         self.playing = True
         while self.playing:
-            self.dt = self.clock.tick(FPS) / 1000
-            self.events()
-            self.update()
-            self.draw()
+            if g.victory: g.show_end_screen()
+            else:
+                self.dt = self.clock.tick(FPS) / 1000
+                self.events()
+                self.update()
+                self.draw()
             # quit once quit button is pressed
     def quit(self):
          pg.quit()
@@ -180,15 +183,15 @@ class Game:
         self.screen.fill(BGCOLOR)
         self.draw_text(self.screen, 'Victory!', 60, WHITE, WIDTH/2 - 32, HEIGHT/2)
         pg.display.flip()
-        self.playing = False
 
         time.sleep(2)
 
         while True:
             # Check if player presses key
             for event in pg.event.get():
-                if event.type == pg.KEYUP:
-                    self.new()
+                if event.type == pg.KEYDOWN:
+                    g.new()
+                    self.victory = False
                     return
                 if event.type == pg.QUIT:
                     self.quit()
@@ -200,4 +203,5 @@ g = Game()
 while True:
     g.new()
     g.run()
+    
 

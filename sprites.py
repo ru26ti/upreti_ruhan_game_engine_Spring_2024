@@ -335,3 +335,11 @@ class Portal(pg.sprite.Sprite):
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.rect = self.image.get_rect(center=(self.x, self.y))
+    
+    def update(self):
+        hits = pg.sprite.spritecollide(self, self.game.all_sprites, False)
+        if hits:
+            if hits[0].__class__.__name__ == 'Player':
+                print('portal')
+                self.game.victory = True
+                self.kill()
