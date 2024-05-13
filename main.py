@@ -11,7 +11,6 @@ goals, rules, feedback, freedom, what the verb, and will it form a sentence
 Sources: 
 Mr. Cozort's course code files and GitHub
 Kids can code: https://github.com/kidscancode/pygame_tutorials/tree/master/tilemap/part%2001 
-
 '''
 import pygame as pg
 from settings import *
