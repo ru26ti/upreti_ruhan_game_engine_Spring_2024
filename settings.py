@@ -6,6 +6,7 @@ FPS = 30
 TITLE = "My Fun Game"
 
 TILESIZE = 32
+tilesize = 64
 
 
 BLACK = (0,0,0)

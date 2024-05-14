@@ -330,7 +330,7 @@ class Portal(pg.sprite.Sprite):
         self.groups = game.all_sprites, game.portal
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.transform.scale(pg.image.load('./images/portal.png'), (TILESIZE, TILESIZE))
+        self.image = pg.transform.scale(pg.image.load('./images/portal.png'), (tilesize, tilesize))
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.rect = self.image.get_rect(center=(self.x, self.y))
