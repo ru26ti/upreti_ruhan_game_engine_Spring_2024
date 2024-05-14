@@ -104,7 +104,7 @@ class Game:
                 if tile == 'C':
                     Coin(self, col, row)
                 if tile == 'M':
-                    Mob(self, col, row, self.player, 10)
+                    Mob(self, col, row, self.player, 100)
                 if tile == 'U':
                     PowerUp(self, col, row)
 
