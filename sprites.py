@@ -103,7 +103,7 @@ class Player(pg.sprite.Sprite):
                         print("Game Over")
                         self.game.quit()
             if str(hits[0].__class__.__name__) == "Coin":
-                self.hitpoints += 100
+                self.hitpoints += 60
             if str(hits[0].__class__.__name__) == "Portal":
                 self.game.show_end_screen()
             if str(hits[0].__class__.__name__) == "PowerUp":
