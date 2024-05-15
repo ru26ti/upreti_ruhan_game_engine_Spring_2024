@@ -269,7 +269,7 @@ class Mob(pg.sprite.Sprite):
             self.shoot_timer = self.shoot_cooldown
             
 
-# Bullet Sprites; modified from ChatGPT
+# Bullet Sprites
 class Bullet(pg.sprite.Sprite):
     def __init__(self, game, x, y, angle, shooter, color, damage, speed):
         self.groups = game.all_sprites
