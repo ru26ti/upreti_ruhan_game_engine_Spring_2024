@@ -42,6 +42,7 @@ class Player(pg.sprite.Sprite):
                 angle = -math.degrees(math.atan2(offset.y, offset.x))
                 Bullet(self.game, self.rect.centerx, self.rect.centery, angle, self, YELLOW, 10, 20)
                 self.shoot_timer = self.shoot_cooldown
+        # Key binds to play the game
         if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.vx = -self.speed
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
@@ -78,6 +79,7 @@ class Player(pg.sprite.Sprite):
                 self.vx = 0
                 self.rect.x = self.x
             if dir == 'y':
+    # Wall collisions for the player
                 hits = pg.sprite.spritecollide(self, self.game.walls, False)
                 if hits:
                     if self.vy > 0:
@@ -102,6 +104,7 @@ class Player(pg.sprite.Sprite):
                     if self.hitpoints <= 0: 
                         print("Game Over")
                         self.game.quit()
+                # Once player dies, game quits ie game over
             if str(hits[0].__class__.__name__) == "Coin":
                 self.hitpoints += 60
             if str(hits[0].__class__.__name__) == "Portal":
@@ -279,7 +282,7 @@ class Bullet(pg.sprite.Sprite):
         self.game = game
         # Set dimensions
     
-        
+        # identification of the bullet ie color and size
         self.image = pg.Surface((10, 10))
         self.image.fill(color)
  
