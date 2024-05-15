@@ -324,7 +324,7 @@ class Bullet(pg.sprite.Sprite):
             # Destroy bullet if hits wall
             elif hits[0].__class__.__name__ == 'Wall':
                 self.kill()
-
+    # Portal class, appears when enemy is killed
 class Portal(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.portal
@@ -334,7 +334,7 @@ class Portal(pg.sprite.Sprite):
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.rect = self.image.get_rect(center=(self.x, self.y))
-    
+   # When enemy killed, portal appears and then "Vicotry" pops up 
     def update(self):
         hits = pg.sprite.spritecollide(self, self.game.all_sprites, False)
         if hits:

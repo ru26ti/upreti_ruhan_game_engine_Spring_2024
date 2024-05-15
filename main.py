@@ -177,7 +177,8 @@ class Game:
             #         self.player.move(dy=-1)
             #     if event.key == pg.K_DOWN:
             #         self.player.move(dy=1)
-    
+            
+    # Switch to Victory screen once player enters portal
     def show_end_screen(self):
         print('Victory')
         self.screen.fill(BGCOLOR)
