@@ -1,5 +1,5 @@
 # This file was created by: Ruhan Upreti
-# per 6 is the best period
+# per 4 is the best period
 # import libraries and modules
 # my first source control edit
 # Create a fun, challenging, and engaging game for all!
